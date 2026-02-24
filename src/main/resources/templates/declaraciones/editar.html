@@ -1,0 +1,397 @@
+<!-- templates/declaraciones/editar.html -->
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Editar Declaración</title>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/additional-methods.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+  <style>
+    body { background: #f6f7fb; }
+    .sidebar{
+      position: fixed; top:0; left:0; height:100vh; width:280px;
+      background:#111827; color:#fff; padding:18px 14px;
+    }
+    .sidebar .brand{ font-weight:800; letter-spacing:.2px; }
+    .sidebar a{
+      display:flex; align-items:center; gap:10px;
+      color:#cbd5e1; text-decoration:none;
+      padding:10px 12px; border-radius:10px;
+    }
+    .sidebar a:hover, .sidebar a.active{ background:rgba(255,255,255,.08); color:#fff; }
+    .main-content{ margin-left:280px; padding:22px; }
+    .card{ border:0; border-radius:16px; box-shadow:0 10px 30px rgba(0,0,0,.06); }
+
+    .error{ color:#dc2626; font-weight:700; margin-top:6px; font-size:.9rem; }
+    .form-control.error{ border:1px solid #dc2626; }
+  </style>
+</head>
+
+<body>
+
+  <aside class="sidebar">
+    <div class="d-flex align-items-center gap-2 mb-4">
+      <div class="rounded-circle bg-light" style="width:42px;height:42px;"></div>
+      <div>
+        <div class="brand">Tevcol</div>
+        <small style="color:#94a3b8;">Módulo Declaraciones</small>
+      </div>
+    </div>
+
+    <nav class="d-grid gap-1">
+      <a href="/" class="">
+        <i class="fa-solid fa-house"></i> Inicio
+      </a>
+      <a href="/declaraciones" class="active">
+        <i class="fa-solid fa-file-lines"></i> Declaraciones
+      </a>
+      <a href="/anexos" class="">
+        <i class="fa-solid fa-paperclip"></i> Anexos
+      </a>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <div class="container-fluid">
+
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <div>
+          <h3 class="mb-0">Editar Declaración</h3>
+          <small class="text-secondary">Actualiza los datos</small>
+        </div>
+
+        <a class="btn btn-outline-secondary" href="/declaraciones">
+          <i class="fa-solid fa-arrow-left me-2"></i>Volver
+        </a>
+      </div>
+
+      <div class="card p-4">
+        <form id="formDeclaracion" method="post" action="/declaraciones/actualizar" novalidate>
+
+          <input type="hidden" name="codigoDeclaracion" th:value="${declaracion.codigoDeclaracion}">
+
+          <div class="row g-3">
+
+            <!-- CAMBIO: quitado min/max para evitar mensaje nativo en inglés -->
+            <div class="col-12">
+              <label class="form-label">Año (2026 a 2090)</label>
+              <input class="form-control"
+                     type="number"
+                     name="anioDeclaracion"
+                     id="anioDeclaracion"
+                     placeholder="2026"
+                     th:value="${declaracion.anioDeclaracion}">
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Estado</label>
+              <select class="form-control" name="estadoDeclaracion" id="estadoDeclaracion">
+                <option value="">Seleccione</option>
+                <option value="VIGENTE" th:selected="${declaracion.estadoDeclaracion == 'VIGENTE'}">VIGENTE</option>
+                <option value="INCOMPLETO" th:selected="${declaracion.estadoDeclaracion == 'INCOMPLETO'}">INCOMPLETO</option>
+                <option value="ANULADO" th:selected="${declaracion.estadoDeclaracion == 'ANULADO'}">ANULADO</option>
+              </select>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Versión</label>
+              <input class="form-control"
+                     type="text"
+                     name="versionDeclaracion"
+                     id="versionDeclaracion"
+                     placeholder="1.0"
+                     th:value="${declaracion.versionDeclaracion}">
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Fecha Declaración (solo hoy)</label>
+              <input class="form-control"
+                     type="date"
+                     name="fechaDeclaracion"
+                     id="fechaDeclaracion"
+                     th:value="${declaracion.fechaDeclaracion}">
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Fecha Aprobación (hoy a 2050)</label>
+              <input class="form-control"
+                     type="date"
+                     name="fechaAprobacionDeclaracion"
+                     id="fechaAprobacionDeclaracion"
+                     th:value="${declaracion.fechaAprobacionDeclaracion}">
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Fecha Obtención Registro</label>
+              <input class="form-control"
+                     type="date"
+                     name="fechaObtencionRegistroDeclaracion"
+                     id="fechaObtencionRegistroDeclaracion"
+                     th:value="${declaracion.fechaObtencionRegistroDeclaracion}">
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Responsable Técnico (solo letras)</label>
+              <input class="form-control"
+                     type="text"
+                     name="reponsableTecnicoDeclaracion"
+                     id="reponsableTecnicoDeclaracion"
+                     placeholder="Ej: Juan Perez"
+                     th:value="${declaracion.reponsableTecnicoDeclaracion}">
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Nombre / Razón Social (solo letras)</label>
+              <input class="form-control"
+                     type="text"
+                     name="nombreRazonSocialDeclaracion"
+                     id="nombreRazonSocialDeclaracion"
+                     placeholder="Ej: Empresa SA"
+                     th:value="${declaracion.nombreRazonSocialDeclaracion}">
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Versión Final</label>
+              <input class="form-control"
+                     type="text"
+                     name="versionFinal"
+                     id="versionFinal"
+                     placeholder="Ej: V6"
+                     th:value="${declaracion.versionFinal}">
+            </div>
+
+            <!-- CAMBIO: quitado min/max para evitar mensaje nativo en inglés -->
+            <div class="col-12">
+              <label class="form-label">FK Cod Registro (1 a 100)</label>
+              <input class="form-control"
+                     type="number"
+                     name="fkCodRegistro"
+                     id="fkCodRegistro"
+                     placeholder="Ej: 1"
+                     th:value="${declaracion.fkCodRegistro}">
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">N° Licencia Empresa</label>
+              <input class="form-control"
+                     type="text"
+                     name="nLicenciaEmpresaDeclaracion"
+                     id="nLicenciaEmpresaDeclaracion"
+                     placeholder="Ej: LIC-EMP-001"
+                     th:value="${declaracion.NLicenciaEmpresaDeclaracion}">
+            </div>
+
+            <!-- CAMBIO: quitado min/max para evitar mensaje nativo en inglés -->
+            <div class="col-12">
+              <label class="form-label">FK Código Emp (1 a 100)</label>
+              <input class="form-control"
+                     type="number"
+                     name="fkCodigoEmp"
+                     id="fkCodigoEmp"
+                     placeholder="Ej: 1"
+                     th:value="${declaracion.fkCodigoEmp}">
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">N° Licencia Ambiental Prestador Servicio</label>
+              <input class="form-control"
+                     type="text"
+                     name="nLicenciaAmbientalPrestadorServicio"
+                     id="nLicenciaAmbientalPrestadorServicio"
+                     placeholder="Ej: LIC-AMB-001"
+                     th:value="${declaracion.NLicenciaAmbientalPrestadorServicio}">
+            </div>
+
+            <!-- CAMBIO: quitado min/max para evitar mensaje nativo en inglés -->
+            <div class="col-12">
+              <label class="form-label">FK Cod Establecimiento (1 a 1000)</label>
+              <input class="form-control"
+                     type="number"
+                     name="fkCodEstablecimiento"
+                     id="fkCodEstablecimiento"
+                     placeholder="Ej: 1"
+                     th:value="${declaracion.fkCodEstablecimiento}">
+            </div>
+
+          </div>
+
+          <hr class="my-4">
+
+          <div class="d-flex gap-2">
+            <button class="btn btn-primary" type="submit">
+              <i class="fa-solid fa-rotate me-2"></i>Actualizar
+            </button>
+
+            <a class="btn btn-light" href="/declaraciones">Cancelar</a>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+
+      function hoyISO() {
+        const d = new Date();
+        d.setHours(0, 0, 0, 0);
+        return d.toISOString().slice(0, 10);
+      }
+
+      const hoy = hoyISO();
+
+      // Rango de fechas igual que en nuevo
+      $("#fechaAprobacionDeclaracion").attr("min", hoy);
+      $("#fechaAprobacionDeclaracion").attr("max", "2050-12-31");
+
+      $("#fechaObtencionRegistroDeclaracion").attr("min", hoy);
+      $("#fechaObtencionRegistroDeclaracion").attr("max", "2050-12-31");
+
+      // ===== VALIDACIONES (MISMAS QUE NUEVO) =====
+      $.validator.addMethod("anioValido", function (value, element) {
+        if (this.optional(element)) return true;
+        const n = Number(value);
+        return Number.isInteger(n) && n >= 2026 && n <= 2090;
+      }, "El año debe estar entre 2026 y 2090");
+
+      $.validator.addMethod("fechaRango2050", function (value, element) {
+        if (this.optional(element)) return true;
+        return value >= hoy && value <= "2050-12-31";
+      }, "La fecha debe ser desde hoy hasta 2050");
+
+      $.validator.addMethod("soloPalabras", function (value, element) {
+        if (this.optional(element)) return true;
+        return /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(value);
+      }, "Solo se permiten letras y espacios (sin números ni caracteres especiales)");
+
+      $.validator.addMethod("rangoEntero", function (value, element, params) {
+        if (this.optional(element)) return true;
+        const n = Number(value);
+        return Number.isInteger(n) && n >= params[0] && n <= params[1];
+      }, "Valor fuera de rango");
+
+      $("#formDeclaracion").validate({
+        rules: {
+          anioDeclaracion: { required: true, number: true, anioValido: true },
+          estadoDeclaracion: { required: true },
+          versionDeclaracion: { required: true, minlength: 1, maxlength: 50 },
+
+          // En editar no obligamos "solo hoy"; solo que esté llena
+          fechaDeclaracion: { required: true },
+
+          fechaAprobacionDeclaracion: { required: true, fechaRango2050: true },
+          fechaObtencionRegistroDeclaracion: { required: true, fechaRango2050: true },
+
+          reponsableTecnicoDeclaracion: { required: true, soloPalabras: true, maxlength: 200 },
+          nombreRazonSocialDeclaracion: { required: true, soloPalabras: true, maxlength: 200 },
+          versionFinal: { required: true, maxlength: 50 },
+
+          fkCodRegistro: { required: true, rangoEntero: [1, 100] },
+          fkCodigoEmp: { required: true, rangoEntero: [1, 100] },
+          fkCodEstablecimiento: { required: true, rangoEntero: [1, 1000] },
+
+          nLicenciaEmpresaDeclaracion: { required: true, maxlength: 60 },
+          nLicenciaAmbientalPrestadorServicio: { required: true, maxlength: 60 }
+        },
+
+        messages: {
+          anioDeclaracion: {
+            required: "El año es obligatorio",
+            number: "Ingrese un año válido",
+            anioValido: "Rango permitido: 2026 a 2090"
+          },
+          estadoDeclaracion: { required: "Seleccione un estado" },
+          versionDeclaracion: {
+            required: "La versión es obligatoria",
+            minlength: "Mínimo 1 carácter",
+            maxlength: "Máximo 50 caracteres"
+          },
+          fechaDeclaracion: {
+            required: "La fecha de declaración es obligatoria"
+          },
+          fechaAprobacionDeclaracion: {
+            required: "La fecha de aprobación es obligatoria",
+            fechaRango2050: "Debe ser desde hoy hasta el 2050"
+          },
+          fechaObtencionRegistroDeclaracion: {
+            required: "La fecha de obtención de registro es obligatoria",
+            fechaRango2050: "Debe ser desde hoy hasta el 2050"
+          },
+          reponsableTecnicoDeclaracion: {
+            required: "El responsable técnico es obligatorio",
+            soloPalabras: "Solo letras y espacios (sin números ni caracteres especiales)",
+            maxlength: "Máximo 200 caracteres"
+          },
+          nombreRazonSocialDeclaracion: {
+            required: "El nombre / razón social es obligatorio",
+            soloPalabras: "Solo letras y espacios (sin números ni caracteres especiales)",
+            maxlength: "Máximo 200 caracteres"
+          },
+          versionFinal: {
+            required: "La versión final es obligatoria",
+            maxlength: "Máximo 50 caracteres"
+          },
+          fkCodRegistro: {
+            required: "El FK Cod Registro es obligatorio",
+            rangoEntero: "Debe estar entre 1 y 100"
+          },
+          fkCodigoEmp: {
+            required: "El FK Código Emp es obligatorio",
+            rangoEntero: "Debe estar entre 1 y 100"
+          },
+          fkCodEstablecimiento: {
+            required: "El FK Cod Establecimiento es obligatorio",
+            rangoEntero: "Debe estar entre 1 y 1000"
+          },
+          nLicenciaEmpresaDeclaracion: {
+            required: "El N° Licencia Empresa es obligatorio",
+            maxlength: "Máximo 60 caracteres"
+          },
+          nLicenciaAmbientalPrestadorServicio: {
+            required: "El N° Licencia Ambiental es obligatorio",
+            maxlength: "Máximo 60 caracteres"
+          }
+        },
+
+        errorClass: "error",
+        errorElement: "div",
+        errorPlacement: function (error, element) {
+          error.insertAfter(element);
+        },
+
+        onkeyup: true,
+        onfocusout: function (element) { this.element(element); },
+        submitHandler: function (form) { form.submit(); }
+      });
+
+    });
+  </script>
+
+  <script th:if="${alertType}">
+    Swal.fire({
+      icon: '[[${alertType}]]',
+      title: '[[${alertTitle}]]',
+      text: '[[${alertText}]]',
+      confirmButtonText: 'OK'
+    });
+  </script>
+
+</body>
+</html>

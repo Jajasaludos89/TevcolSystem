@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Nuevo Anexo</title>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
+
+  <!-- jQuery Validate -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/additional-methods.min.js"></script>
+
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet" />
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+  <style>
+    body { background: #f6f7fb; }
+    .sidebar{
+      position: fixed; top:0; left:0; height:100vh; width:280px;
+      background: #111827; color:#fff; padding:18px 14px;
+    }
+    .sidebar .brand{ font-weight: 800; letter-spacing: .2px; }
+    .sidebar a{
+      display:flex; align-items:center; gap:10px;
+      color:#cbd5e1; text-decoration:none;
+      padding:10px 12px; border-radius:10px;
+    }
+    .sidebar a:hover, .sidebar a.active{
+      background: rgba(255,255,255,.08); color:#fff;
+    }
+    .main-content{ margin-left:280px; padding:22px; }
+    .card{ border:0; border-radius:16px; box-shadow:0 10px 30px rgba(0,0,0,.06); }
+
+    .error{ color:#dc2626; font-weight:700; margin-top:6px; font-size:.9rem; }
+    .form-control.error, .form-select.error{ border:1px solid #dc2626; }
+  </style>
+</head>
+
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="d-flex align-items-center gap-2 mb-4">
+      <div class="rounded-circle bg-light" style="width:42px;height:42px;"></div>
+      <div>
+        <div class="brand">Tevcol</div>
+        <small style="color:#94a3b8;">Módulo Declaraciones</small>
+      </div>
+    </div>
+
+    <nav class="d-grid gap-1">
+      <a href="/" class="">
+        <i class="fa-solid fa-house"></i> Inicio
+      </a>
+      <a href="/anexos" class="active">
+        <i class="fa-solid fa-file-circle-plus"></i> Anexos
+      </a>
+      <a href="/declaraciones" class="">
+        <i class="fa-solid fa-folder-open"></i> Declaraciones
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="main-content">
+    <div class="container-fluid">
+
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <div>
+          <h3 class="mb-0">Nuevo Anexo</h3>
+          <small class="text-secondary">Completa los datos</small>
+        </div>
+
+        <a class="btn btn-outline-secondary" href="/anexos">
+          <i class="fa-solid fa-arrow-left me-2"></i>Volver
+        </a>
+      </div>
+
+      <div class="card p-4">
+        <form id="formAnexo" method="post" action="/anexos/guardar" novalidate>
+
+          <div class="row g-3">
+
+            <div class="col-12">
+              <label class="form-label">Código (solo si tu DB NO es autoincrement)</label>
+              <input class="form-control"
+                     type="number"
+                     name="codigoAnxDeclaracion"
+                     id="codigoAnxDeclaracion"
+                     placeholder="Ej: 10">
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Fecha</label>
+              <input class="form-control"
+                     type="date"
+                     name="fechaAnxDeclaracion"
+                     id="fechaAnxDeclaracion">
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Nombre</label>
+              <input class="form-control"
+                     type="text"
+                     name="nombreAnxDeclaracion"
+                     id="nombreAnxDeclaracion"
+                     placeholder="Ej: Anexo de inspección">
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Descripción</label>
+              <input class="form-control"
+                     type="text"
+                     name="descripcionAnxDeclaracion"
+                     id="descripcionAnxDeclaracion"
+                     placeholder="Ej: Detalle del anexo">
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Link/Archivo</label>
+              <input class="form-control"
+                     type="text"
+                     name="linkArchivoAnxDeclaracion"
+                     id="linkArchivoAnxDeclaracion"
+                     placeholder="Ej: archivo.pdf o ruta">
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Declaración (FK)</label>
+
+              <!-- ESTE ES EL CAMBIO IMPORTANTE: debe llamarse fkCodDeclaracion -->
+              <select class="form-select" name="fkCodDeclaracion" id="fkCodDeclaracion">
+                <option value="">-- Seleccione --</option>
+                <option th:each="d : ${declaraciones}"
+                        th:value="${d.codigoDeclaracion}"
+                        th:text="${d.codigoDeclaracion} + ' | ' + ${d.anioDeclaracion} + ' | ' + ${d.estadoDeclaracion}">
+                </option>
+              </select>
+
+            </div>
+
+          </div>
+
+          <hr class="my-4">
+
+          <div class="d-flex gap-2">
+            <button class="btn btn-primary" type="submit">
+              <i class="fa-solid fa-floppy-disk me-2"></i>Guardar
+            </button>
+
+            <a class="btn btn-light" href="/anexos">Cancelar</a>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Bootstrap 5 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+
+      $.validator.addMethod("soloTexto", function (value, element) {
+        if (this.optional(element)) return true;
+        return value.trim().length >= 3;
+      }, "Debe tener al menos 3 caracteres");
+
+      $("#formAnexo").validate({
+        rules: {
+          nombreAnxDeclaracion: { required: true, soloTexto: true },
+          fkCodDeclaracion: { required: true }
+        },
+        messages: {
+          nombreAnxDeclaracion: {
+            required: "El nombre es obligatorio",
+            soloTexto: "Mínimo 3 caracteres"
+          },
+          fkCodDeclaracion: {
+            required: "Seleccione una declaración"
+          }
+        },
+        errorClass: "error",
+        onkeyup: true,
+        onfocusout: function (element) { this.element(element); },
+        submitHandler: function (form) { form.submit(); }
+      });
+
+    });
+  </script>
+
+  <!-- SweetAlert desde FlashAttributes -->
+  <script th:if="${alertType}">
+    Swal.fire({
+      icon: '[[${alertType}]]',
+      title: '[[${alertTitle}]]',
+      text: '[[${alertText}]]',
+      confirmButtonText: 'OK'
+    });
+  </script>
+
+</body>
+</html>
