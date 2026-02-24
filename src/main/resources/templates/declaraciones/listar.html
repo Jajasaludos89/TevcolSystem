@@ -71,6 +71,25 @@
       border-radius:8px; border:1px solid #d1d5db;
       padding:6px 10px; outline:none;
     }
+	
+	.btn-logout{
+	  display:flex;
+	  align-items:center;
+	  gap:8px;
+	  background:#dc2626;
+	  color:#fff;
+	  padding:10px 14px;
+	  border-radius:10px;
+	  text-decoration:none;
+	  font-size:.9rem;
+	  font-weight:600;
+	  transition:.2s;
+	}
+
+	.btn-logout:hover{
+	  background:#b91c1c;
+	  color:#fff;
+	}
 
     .dt-buttons .dt-button{
       border-radius:8px !important;
@@ -97,8 +116,9 @@
     </div>
 
     <nav class="d-grid gap-1">
-		<a href="/logout">
-		  <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+		<a href="/logout" class="btn btn-logout mt-3">
+		  <i class="fa-solid fa-right-from-bracket me-2"></i>
+		  Cerrar sesión
 		</a>
 
       <a href="/declaraciones" class="active">
