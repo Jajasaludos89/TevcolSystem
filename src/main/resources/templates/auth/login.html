@@ -61,6 +61,10 @@
       <button class="btn btn-primary w-100" type="submit">
         Entrar
       </button>
+	  
+	  <div class="text-center mt-3">
+	    <a href="/recuperar">¿Olvidaste tu contraseña?</a>
+	  </div>
 
     </form>
 
@@ -72,13 +76,8 @@ $(document).ready(function(){
 
   // Validar usuario exacto
   $.validator.addMethod("usuarioCorrecto", function(value, element){
-      return value === "adminutc,javier";
+      return value === "adminutc.javier";
   }, "Usuario incorrecto");
-
-  // Validar contraseña exacta
-  $.validator.addMethod("passwordCorrecto", function(value, element){
-      return value === "tatsumaki89*";
-  }, "Contraseña incorrecta");
 
   $("#formLogin").validate({
       rules:{

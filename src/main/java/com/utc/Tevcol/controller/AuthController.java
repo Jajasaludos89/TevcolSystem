@@ -4,8 +4,13 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Random;
+
 @Controller
 public class AuthController {
+
+    private String usuarioActual = "adminutc.javier";
+    private String passwordActual = "tatsumaki89*";
 
     @GetMapping("/")
     public String rootRedirect(HttpSession session) {
@@ -25,8 +30,8 @@ public class AuthController {
                                 @RequestParam String password,
                                 HttpSession session) {
 
-        if ("adminutc.javier".equals(username) &&
-            "tatsumaki89*".equals(password)) {
+        if (usuarioActual.equals(username) &&
+            passwordActual.equals(password)) {
 
             session.setAttribute("usuarioLogueado", username);
             return "redirect:/declaraciones";
@@ -39,5 +44,38 @@ public class AuthController {
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/login?logout";
+    }
+
+    // -------- RECUPERAR --------
+
+    @GetMapping("/recuperar")
+    public String recuperar(HttpSession session) {
+
+        if (session.getAttribute("codigoRecuperacion") == null) {
+            int codigo = new Random().nextInt(9000) + 1000;
+            session.setAttribute("codigoRecuperacion", codigo);
+        }
+
+        return "auth/recuperar";
+    }
+
+    @PostMapping("/recuperar")
+    public String procesarRecuperacion(@RequestParam String username,
+                                       @RequestParam String nuevaPassword,
+                                       @RequestParam int codigoIngresado,
+                                       HttpSession session) {
+
+        Integer codigoSesion = (Integer) session.getAttribute("codigoRecuperacion");
+
+        if (codigoSesion != null &&
+            codigoSesion == codigoIngresado &&
+            usuarioActual.equals(username)) {
+
+            passwordActual = nuevaPassword;
+            session.removeAttribute("codigoRecuperacion");
+            return "redirect:/login?resetok";
+        }
+
+        return "redirect:/recuperar?error";
     }
 }

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>Recuperar - Tevcol</title>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+
+<body class="bg-light">
+
+<div class="container vh-100 d-flex align-items-center justify-content-center">
+  <div class="card p-4 shadow-sm" style="width:400px;border-radius:18px;">
+
+    <h4>Recuperar contraseña</h4>
+
+    <div class="alert alert-info mt-3">
+      Código de verificación: 
+      <strong th:text="${session.codigoRecuperacion}"></strong>
+    </div>
+
+    <div th:if="${param.error}" class="alert alert-danger">
+      Datos incorrectos
+    </div>
+
+    <form id="formRecuperar" method="post" action="/recuperar">
+
+      <div class="mb-3">
+        <label>Usuario</label>
+        <input class="form-control" name="username">
+      </div>
+
+      <div class="mb-3">
+        <label>Nueva contraseña</label>
+        <input class="form-control" type="password" name="nuevaPassword">
+      </div>
+
+      <div class="mb-3">
+        <label>Código mostrado arriba</label>
+        <input class="form-control" name="codigoIngresado">
+      </div>
+
+      <button class="btn btn-primary w-100">Actualizar</button>
+
+    </form>
+
+  </div>
+</div>
+
+<script>
+$("#formRecuperar").validate({
+  rules:{
+    username:{ required:true },
+    nuevaPassword:{ required:true, minlength:5 },
+    codigoIngresado:{ required:true, number:true }
+  },
+  messages:{
+    username:{ required:"Usuario obligatorio" },
+    nuevaPassword:{ required:"Ingrese nueva contraseña", minlength:"Mínimo 5 caracteres" },
+    codigoIngresado:{ required:"Ingrese el código", number:"Solo números" }
+  }
+});
+</script>
+
+</body>
+</html>
