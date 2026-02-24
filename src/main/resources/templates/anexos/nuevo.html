@@ -1,3 +1,4 @@
+<!-- templates/anexos/nuevo.html -->
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
@@ -6,41 +7,36 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>Nuevo Anexo</title>
 
-  <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
 
-  <!-- jQuery Validate -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/additional-methods.min.js"></script>
 
-  <!-- SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet" />
 
-  <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-  <!-- Font Awesome -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" crossorigin="anonymous" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"
+    crossorigin="anonymous" />
 
   <style>
     body { background: #f6f7fb; }
     .sidebar{
       position: fixed; top:0; left:0; height:100vh; width:280px;
-      background: #111827; color:#fff; padding:18px 14px;
+      background:#111827; color:#fff; padding:18px 14px;
     }
-    .sidebar .brand{ font-weight: 800; letter-spacing: .2px; }
+    .sidebar .brand{ font-weight:800; letter-spacing:.2px; }
     .sidebar a{
       display:flex; align-items:center; gap:10px;
       color:#cbd5e1; text-decoration:none;
       padding:10px 12px; border-radius:10px;
     }
-    .sidebar a:hover, .sidebar a.active{
-      background: rgba(255,255,255,.08); color:#fff;
-    }
+    .sidebar a:hover, .sidebar a.active{ background:rgba(255,255,255,.08); color:#fff; }
     .main-content{ margin-left:280px; padding:22px; }
     .card{ border:0; border-radius:16px; box-shadow:0 10px 30px rgba(0,0,0,.06); }
 
+    /* errores en rojito debajo */
     .error{ color:#dc2626; font-weight:700; margin-top:6px; font-size:.9rem; }
     .form-control.error, .form-select.error{ border:1px solid #dc2626; }
   </style>
@@ -48,7 +44,6 @@
 
 <body>
 
-  <!-- Sidebar -->
   <aside class="sidebar">
     <div class="d-flex align-items-center gap-2 mb-4">
       <div class="rounded-circle bg-light" style="width:42px;height:42px;"></div>
@@ -62,16 +57,15 @@
       <a href="/" class="">
         <i class="fa-solid fa-house"></i> Inicio
       </a>
-      <a href="/anexos" class="active">
-        <i class="fa-solid fa-file-circle-plus"></i> Anexos
-      </a>
       <a href="/declaraciones" class="">
-        <i class="fa-solid fa-folder-open"></i> Declaraciones
+        <i class="fa-solid fa-file-lines"></i> Declaraciones
+      </a>
+      <a href="/anexos" class="active">
+        <i class="fa-solid fa-paperclip"></i> Anexos
       </a>
     </nav>
   </aside>
 
-  <!-- Main -->
   <main class="main-content">
     <div class="container-fluid">
 
@@ -92,16 +86,16 @@
           <div class="row g-3">
 
             <div class="col-12">
-              <label class="form-label">Código (solo si tu DB NO es autoincrement)</label>
+              <label class="form-label">Código de Anexo</label>
               <input class="form-control"
                      type="number"
                      name="codigoAnxDeclaracion"
                      id="codigoAnxDeclaracion"
-                     placeholder="Ej: 10">
+                     placeholder="Ej: 1">
             </div>
 
             <div class="col-12">
-              <label class="form-label">Fecha</label>
+              <label class="form-label">Fecha (hoy a 2050)</label>
               <input class="form-control"
                      type="date"
                      name="fechaAnxDeclaracion"
@@ -109,44 +103,44 @@
             </div>
 
             <div class="col-12">
-              <label class="form-label">Nombre</label>
+              <label class="form-label">Nombre (solo letras)</label>
               <input class="form-control"
                      type="text"
                      name="nombreAnxDeclaracion"
                      id="nombreAnxDeclaracion"
-                     placeholder="Ej: Anexo de inspección">
+                     placeholder="Ej: Informe técnico">
             </div>
 
             <div class="col-12">
               <label class="form-label">Descripción</label>
-              <input class="form-control"
-                     type="text"
-                     name="descripcionAnxDeclaracion"
-                     id="descripcionAnxDeclaracion"
-                     placeholder="Ej: Detalle del anexo">
+              <textarea class="form-control"
+                        name="descripcionAnxDeclaracion"
+                        id="descripcionAnxDeclaracion"
+                        rows="3"
+                        placeholder="Describe el anexo"></textarea>
             </div>
 
             <div class="col-12">
-              <label class="form-label">Link/Archivo</label>
+              <label class="form-label">Link / Nombre del archivo</label>
               <input class="form-control"
                      type="text"
                      name="linkArchivoAnxDeclaracion"
                      id="linkArchivoAnxDeclaracion"
-                     placeholder="Ej: archivo.pdf o ruta">
+                     placeholder="Ej: anexo1.pdf o https://...">
             </div>
 
+            <!-- FK como estaba: combo con declaraciones -->
             <div class="col-12">
-              <label class="form-label">Declaración (FK)</label>
-
-              <!-- ESTE ES EL CAMBIO IMPORTANTE: debe llamarse fkCodDeclaracion -->
-              <select class="form-select" name="fkCodDeclaracion" id="fkCodDeclaracion">
-                <option value="">-- Seleccione --</option>
+              <label class="form-label">Código Declaración (FK)</label>
+              <select class="form-select"
+                      name="fkCodDeclaracion"
+                      id="fkCodDeclaracion">
+                <option value="">Seleccione</option>
                 <option th:each="d : ${declaraciones}"
                         th:value="${d.codigoDeclaracion}"
-                        th:text="${d.codigoDeclaracion} + ' | ' + ${d.anioDeclaracion} + ' | ' + ${d.estadoDeclaracion}">
+                        th:text="${d.codigoDeclaracion + ' - ' + d.anioDeclaracion + ' - ' + d.estadoDeclaracion}">
                 </option>
               </select>
-
             </div>
 
           </div>
@@ -167,32 +161,101 @@
     </div>
   </main>
 
-  <!-- Bootstrap 5 JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
     $(document).ready(function () {
 
-      $.validator.addMethod("soloTexto", function (value, element) {
+      function hoyISO() {
+        const d = new Date();
+        d.setHours(0, 0, 0, 0);
+        return d.toISOString().slice(0, 10);
+      }
+
+      const hoy = hoyISO();
+
+      // Fecha: desde hoy hasta 2050-12-31
+      $("#fechaAnxDeclaracion").attr("min", hoy);
+      $("#fechaAnxDeclaracion").attr("max", "2050-12-31");
+      $("#fechaAnxDeclaracion").val(hoy);
+
+      // ===== VALIDACIONES (como en declaraciones) =====
+
+      // Solo palabras (letras + espacios + tildes + ñ)
+      $.validator.addMethod("soloPalabras", function (value, element) {
         if (this.optional(element)) return true;
-        return value.trim().length >= 3;
-      }, "Debe tener al menos 3 caracteres");
+        return /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(value);
+      }, "Solo se permiten letras y espacios (sin números ni caracteres especiales)");
+
+      // Fecha en rango hoy-2050
+      $.validator.addMethod("fechaRango2050", function (value, element) {
+        if (this.optional(element)) return true;
+        return value >= hoy && value <= "2050-12-31";
+      }, "La fecha debe ser desde hoy hasta 2050");
+
+      // Código positivo
+      $.validator.addMethod("idPositivo", function (value, element) {
+        if (this.optional(element)) return true;
+        const n = Number(value);
+        return Number.isInteger(n) && n > 0;
+      }, "El código debe ser mayor a 0");
 
       $("#formAnexo").validate({
         rules: {
-          nombreAnxDeclaracion: { required: true, soloTexto: true },
+          codigoAnxDeclaracion: {
+            required: true,
+            number: true,
+            idPositivo: true,
+            remote: {
+              url: "/anexos/exists-codigo",
+              type: "get",
+              data: {
+                codigo: function () { return $("#codigoAnxDeclaracion").val(); }
+              }
+            }
+          },
+          fechaAnxDeclaracion: { required: true, fechaRango2050: true },
+          nombreAnxDeclaracion: { required: true, soloPalabras: true, maxlength: 200 },
+          descripcionAnxDeclaracion: { required: true, maxlength: 500 },
+          linkArchivoAnxDeclaracion: { required: true, maxlength: 255 },
           fkCodDeclaracion: { required: true }
         },
+
         messages: {
+          codigoAnxDeclaracion: {
+            required: "El código del anexo es obligatorio",
+            number: "Ingrese un número válido",
+            idPositivo: "Debe ser mayor a 0",
+            remote: "Ese código ya existe, usa otro"
+          },
+          fechaAnxDeclaracion: {
+            required: "La fecha es obligatoria",
+            fechaRango2050: "Debe ser desde hoy hasta el 2050"
+          },
           nombreAnxDeclaracion: {
             required: "El nombre es obligatorio",
-            soloTexto: "Mínimo 3 caracteres"
+            soloPalabras: "Solo letras y espacios (sin números ni caracteres especiales)",
+            maxlength: "Máximo 200 caracteres"
+          },
+          descripcionAnxDeclaracion: {
+            required: "La descripción es obligatoria",
+            maxlength: "Máximo 500 caracteres"
+          },
+          linkArchivoAnxDeclaracion: {
+			required: "Es obligatorio ingresar algun link o nombre del archivo",
+            maxlength: "Máximo 255 caracteres"
           },
           fkCodDeclaracion: {
-            required: "Seleccione una declaración"
+            required: "El código de declaración (FK) es obligatorio"
           }
         },
+
         errorClass: "error",
+        errorElement: "div",
+        errorPlacement: function (error, element) {
+          error.insertAfter(element);
+        },
+
         onkeyup: true,
         onfocusout: function (element) { this.element(element); },
         submitHandler: function (form) { form.submit(); }
@@ -201,7 +264,6 @@
     });
   </script>
 
-  <!-- SweetAlert desde FlashAttributes -->
   <script th:if="${alertType}">
     Swal.fire({
       icon: '[[${alertType}]]',

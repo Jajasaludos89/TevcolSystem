@@ -54,6 +54,20 @@ public class AnexoController {
         return "anexos/nuevo";
     }
 
+    // NUEVO: endpoint para jQuery Validate remote (MISMA LÓGICA QUE DECLARACIONES)
+    // Devuelve "true" si el código está disponible, "false" si ya existe.
+    // No usa ningún método nuevo del service: solo buscarPorId (ya lo tienes).
+    @GetMapping(value = "/exists-codigo", produces = "text/plain")
+    @ResponseBody
+    public String existsCodigo(@RequestParam("codigo") Long codigo) {
+
+        if (codigo == null) return "true";
+
+        boolean existe = service.buscarPorId(codigo).isPresent();
+
+        return existe ? "false" : "true";
+    }
+
     @PostMapping("/guardar")
     public String guardar(@ModelAttribute("anexo") AnexoDeclaracion a,
                           @RequestParam("fkCodDeclaracion") Long fkCodDeclaracion,
