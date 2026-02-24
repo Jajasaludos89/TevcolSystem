@@ -29,11 +29,25 @@ public class AnexoDeclaracion {
     @JoinColumn(name = "fk_cod_declaracion")
     private EncabezadoDeclaracionAnual declaracion;
 
-    @Column(name = "fecha_creado_anx_declaracion")
+    @Column(name = "fecha_creado_anx_declaracion", updatable = false)
     private LocalDateTime fechaCreadoAnxDeclaracion;
 
     @Column(name = "fecha_editado_anx_declaracion")
     private LocalDateTime fechaEditadoAnxDeclaracion;
+
+    // ===== CAMBIO: Hooks JPA para evitar NULL en timestamps =====
+    @PrePersist
+    protected void onCreate() {
+        LocalDateTime now = LocalDateTime.now();
+        if (fechaCreadoAnxDeclaracion == null) fechaCreadoAnxDeclaracion = now;
+        if (fechaEditadoAnxDeclaracion == null) fechaEditadoAnxDeclaracion = now;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        fechaEditadoAnxDeclaracion = LocalDateTime.now();
+    }
+    // ===========================================================
 
     // getters & setters
 
