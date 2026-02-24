@@ -132,11 +132,17 @@
             <thead class="table-dark">
               <tr>
                 <th>Código</th>
-                <th>Fecha</th>
+
+                <th>Fecha Anexo</th>
                 <th>Nombre</th>
                 <th>Descripción</th>
                 <th>Archivo</th>
+
                 <th>Declaración (FK)</th>
+
+                <th>Fecha Creado</th>
+                <th>Fecha Editado</th>
+
                 <th style="width: 160px;">Acciones</th>
               </tr>
             </thead>
@@ -144,6 +150,7 @@
             <tbody>
               <tr th:each="a : ${anexos}">
                 <td th:text="${a.codigoAnxDeclaracion}"></td>
+
                 <td th:text="${a.fechaAnxDeclaracion}"></td>
                 <td th:text="${a.nombreAnxDeclaracion}"></td>
                 <td th:text="${a.descripcionAnxDeclaracion}"></td>
@@ -159,8 +166,11 @@
                      title="Link/Nombre del archivo"></a>
                 </td>
 
-                <!-- Si tienes relación @ManyToOne -->
-                <td th:text="${a.declaracion != null ? a.declaracion.codigoDeclaracion : a.fkCodDeclaracion}"></td>
+                <!-- SOLO con la relación ManyToOne (recomendado) -->
+                <td th:text="${a.declaracion != null ? a.declaracion.codigoDeclaracion : ''}"></td>
+
+                <td th:text="${a.fechaCreadoAnxDeclaracion}"></td>
+                <td th:text="${a.fechaEditadoAnxDeclaracion}"></td>
 
                 <td>
                   <div class="d-flex gap-2">
